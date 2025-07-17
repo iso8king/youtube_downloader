@@ -3,9 +3,12 @@ const fs = require('fs');
 const ytdl = require('@distube/ytdl-core');
 const download = require('./download.js')
 const app = express();
-
+const cors = require('cors');
+const path = require('path');
  
-
+app.use(cors({
+    exposedHeaders : ['X-Filename']
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 app.listen(7888, () => {
@@ -26,15 +29,17 @@ app.get('/mp3', async(req, res) => {
     // await 
     // res.redirect(output)
     const relativePath = await download.downloadMP3(req.query.url);
-
+    const truePath = path.resolve(`${dirMP3}/${relativePath}`);
+    res.setHeader('Content-Type', 'audio/mpeg');       // pastikan ini benar
    
-    res.download(`${dirMP3}/${relativePath}`, (e) => {
-        if(e){
-            console.log(e);
-            res.status(500).send("Gagal");
-        }
-    })
+    // res.download(`${dirMP3}/${relativePath}`, (e) => {
+    //     if(e){
+    //         console.log(e);
+    //         res.status(500).send("Gagal");
+    //     }
+    // })
 
+    res.sendFile(truePath, { headers: { 'X-Filename': relativePath } });
 });
 
 app.get('/highestmp4', async(req, res) => {
