@@ -28,33 +28,37 @@ app.get('/mp3', async(req, res) => {
     const relativePath = await download.downloadMP3(req.query.url);
     const truePath = path.resolve(`${dirMP3}/${relativePath}`);
     res.setHeader('Content-Type', 'audio/mpeg');     
-   
-    // res.download(`${dirMP3}/${relativePath}`, (e) => {
-    //     if(e){
-    //         console.log(e);
-    //         res.status(500).send("Gagal");
-    //     }
-    // })
+    res.setHeader('X-Filename' , relativePath);
 
-    res.sendFile(truePath, { headers: { 'X-Filename': relativePath } });
+    res.sendFile(truePath , (err) => {
+        if (err) {
+        console.error("Gagal kirim file:", err);
+        res.status(500).send("Gagal mengirim file");
+      } else {
+        fs.unlink(truePath,(err)=> {
+            if(err){console.log(`error ${err}`);}
+        })
+      }
+    });
 });
 
 app.get('/highestmp4', async(req, res) => {
-    // const relativePath = await download.downloadMP4Highest(req.query.url);
-
-   
-    // res.download(`${relativePath}`, (e) => {
-    //     if(e){
-    //         console.log(e);
-    //         res.status(500).send("Gagal");
-    //     }
-    // })
 
     const relativePath = await download.downloadMP4Highest(req.query.url);
     const truePath = path.resolve(`${dirMP4}/${relativePath}`);
     res.setHeader('Content-Type', 'video/mp4');
+    res.setHeader('X-Filename' , relativePath);
 
-    res.sendFile(truePath, { headers: { 'X-Filename': relativePath } });
-
+    res.sendFile(truePath , (err) => {
+        if (err) {
+        console.error("Gagal kirim file:", err);
+        res.status(500).send("Gagal mengirim file");
+      } else {
+        fs.unlink(truePath,(err)=> {
+            if(err){console.log(`error ${err}`);}
+        })
+      }
+    });
+    
 });
 
