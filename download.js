@@ -117,7 +117,7 @@ async function downloadMP4Highest(link){
         await convert.mergeVA(dirWebm);
 
         console.log(`Audio ${videoTitle} Selesai Di Download!`);
-        return `${dirWebm}_merged.mp4`
+        return `${videoTitleSafe}_merged.mp4`
 }
  catch (error) {
         console.log(error);

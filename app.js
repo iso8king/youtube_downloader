@@ -25,12 +25,9 @@ app.get('/', async(req, res) => {
 });
 
 app.get('/mp3', async(req, res) => {
-    // await mp4.downloadMP4(req.query.url);
-    // await 
-    // res.redirect(output)
     const relativePath = await download.downloadMP3(req.query.url);
     const truePath = path.resolve(`${dirMP3}/${relativePath}`);
-    res.setHeader('Content-Type', 'audio/mpeg');       // pastikan ini benar
+    res.setHeader('Content-Type', 'audio/mpeg');     
    
     // res.download(`${dirMP3}/${relativePath}`, (e) => {
     //     if(e){
@@ -43,18 +40,21 @@ app.get('/mp3', async(req, res) => {
 });
 
 app.get('/highestmp4', async(req, res) => {
-    // await mp4.downloadMP4(req.query.url);
-    // await 
-    // res.redirect(output)
-    const relativePath = await download.downloadMP4Highest(req.query.url);
+    // const relativePath = await download.downloadMP4Highest(req.query.url);
 
    
-    res.download(`${relativePath}`, (e) => {
-        if(e){
-            console.log(e);
-            res.status(500).send("Gagal");
-        }
-    })
+    // res.download(`${relativePath}`, (e) => {
+    //     if(e){
+    //         console.log(e);
+    //         res.status(500).send("Gagal");
+    //     }
+    // })
+
+    const relativePath = await download.downloadMP4Highest(req.query.url);
+    const truePath = path.resolve(`${dirMP4}/${relativePath}`);
+    res.setHeader('Content-Type', 'video/mp4');
+
+    res.sendFile(truePath, { headers: { 'X-Filename': relativePath } });
 
 });
 
