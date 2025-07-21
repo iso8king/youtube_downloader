@@ -18,9 +18,6 @@ API backend sederhana untuk mendownload video dan audio dari YouTube dalam forma
 | Download    | ytdl-core              |
 | Konversi    | ffmpeg-static          |
 
-## 📦 Struktur Project
-├── controllers/ │ └── downloadController.js ├── routes/ │ └── downloadRoutes.js ├── utils/ │ └── converter.js ├── index.js ├── package.json
-
 
 ## ⚙️ API Endpoint
 
